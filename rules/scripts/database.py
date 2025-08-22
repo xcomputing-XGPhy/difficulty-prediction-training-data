@@ -114,3 +114,31 @@ class ParsimonyTree(P.Model):
     class Meta:
         database = db
 
+class IQTreeTree(P.Model):
+    uuid = P.UUIDField()
+    dataset = P.ForeignKeyField(Dataset)
+    dataset_uuid = P.UUIDField()
+    starting_type = P.CharField(choices=[("random", "random"), ("parsimony", "parsimony")])
+    newick_search = P.TextField(null=True)
+    llh_search = P.FloatField(null=True)
+    compute_time_search = P.FloatField(null=True)
+    plausible = P.BooleanField(null=True)
+    cluster_id = P.IntegerField(null=True)
+
+    bpRell = P.FloatField(null=True)
+    bpRell_significant = P.BooleanField(null=True)
+    pKH = P.FloatField(null=True)
+    pKH_significant = P.BooleanField(null=True)
+    pSH = P.FloatField(null=True)
+    pSH_significant = P.BooleanField(null=True)
+    pWKH = P.FloatField(null=True)
+    pWKH_significant = P.BooleanField(null=True)
+    pWSH = P.FloatField(null=True)
+    pWSH_significant = P.BooleanField(null=True)
+    cELW = P.FloatField(null=True)
+    cELW_significant = P.BooleanField(null=True)
+    pAU = P.FloatField(null=True)
+    pAU_significant = P.BooleanField(null=True)
+
+    class Meta:
+        database = db

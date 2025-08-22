@@ -35,7 +35,8 @@ db.create_tables(
     [
         Dataset,
         RaxmlNGTree,
-        ParsimonyTree
+        ParsimonyTree,
+        IQTreeTree
     ]
 )
 dataset_name = snakemake.wildcards.msa
@@ -163,6 +164,52 @@ dataset_dbobj = Dataset.create(
     std_parsimony_score     = np.std(parsimony_scores),
 )
 # fmt: on
+
+from parse_iqtree_logs import parse_iqtree_log
+from iqtree_statstest_parser import get_iqtree_results, get_iqtree_results_for_eval_tree_str
+
+def save_iqtree_tree(iqtree_trees, iqtree_logs, starting_type):
+    plausible_llhs = []
+
+    for tree_file, log_file in zip(iqtree_trees, iqtree_logs):
+        newick = open(tree_file).readline()
+        statstest_results, cluster_id = get_iqtree_results_for_eval_tree_str(iqtree_results, newick, clusters)
+        tests = statstest_results["tests"]
+        log_data = parse_iqtree_log(log_file)
+
+        IQTreeTree.create(
+            dataset=dataset_dbobj,
+            dataset_uuid=dataset_dbobj.uuid,
+            uuid=uuid.uuid4().hex,
+
+            starting_type=starting_type,
+            newick_search=newick,
+            llh_search=log_data["log_likelihood"],
+            compute_time_search=log_data["runtime"],
+
+            plausible=statstest_results["plausible"],
+            cluster_id=cluster_id,
+
+            bpRell=tests["bp-RELL"]["score"],
+            bpRell_significant=tests["bp-RELL"]["significant"],
+            pKH=tests["p-KH"]["score"],
+            pKH_significant=tests["p-KH"]["significant"],
+            pSH=tests["p-SH"]["score"],
+            pSH_significant=tests["p-SH"]["significant"],
+            pWKH=tests["p-WKH"]["score"],
+            pWKH_significant=tests["p-WKH"]["significant"],
+            pWSH=tests["p-WSH"]["score"],
+            pWSH_significant=tests["p-WSH"]["significant"],
+            cELW=tests["c-ELW"]["score"],
+            cELW_significant=tests["c-ELW"]["significant"],
+            pAU=tests["p-AU"]["score"],
+            pAU_significant=tests["p-AU"]["significant"],
+        )
+
+        if statstest_results["plausible"]:
+            plausible_llhs.append(log_data["log_likelihood"])
+
+    return plausible_llhs
 
 def save_raxmlng_tree(search_trees, search_logs, eval_trees, eval_logs, starting_type):
     plausible_llhs = []

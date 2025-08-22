@@ -15,8 +15,8 @@ rule collect_search_trees:
     Collect all trees inferred by IQ-TREE from parsimony and random starts.
     """
     input:
-        pars_trees = expand(output_files_iqtree_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=lambda wildcards: wildcards.msa),
-        rand_trees = expand(output_files_iqtree_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=lambda wildcards: wildcards.msa)
+        pars_trees = expand(output_files_iqtree_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names),
+        rand_trees = expand(output_files_iqtree_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=msa_names)
     output:
         all_search_trees = output_files_iqtree_dir + "AllSearchTrees.trees"
     run:

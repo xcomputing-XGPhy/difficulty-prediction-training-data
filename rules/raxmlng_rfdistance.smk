@@ -3,10 +3,10 @@ rule raxmlng_rfdistance_search_trees:
     Rule that computes the RF-Distances between all search trees using RAxML-NG.
     """
     input:
-         all_search_trees = output_files_iqtree_dir + "AllSearchTrees.trees"
+        rules.collect_search_trees.output[0]
     output:
-        rfDist      = f"{raxmlng_tree_inference_dir}inference.raxml.rfDistances",
-        rfDist_log  = f"{raxmlng_tree_inference_dir}inference.raxml.rfDistances.log",
+        f"{raxmlng_tree_inference_dir}inference.raxml.rfDistances",
+        f"{raxmlng_tree_inference_dir}inference.raxml.rfDistances.log",
     params:
         prefix = f"{raxmlng_tree_inference_dir}inference"
     log:
@@ -14,9 +14,9 @@ rule raxmlng_rfdistance_search_trees:
     shell:
         "{raxmlng_command} "
         "--rfdist "
-        "--tree {input.all_search_trees} "
+        "--tree {input} "
         "--prefix {params.prefix} "
-        ">> {output.rfDist_log} "
+        ">> {output[1]}"
 
 
 rule raxmlng_rfdistance_eval_trees:

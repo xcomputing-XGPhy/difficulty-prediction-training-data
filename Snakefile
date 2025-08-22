@@ -78,6 +78,11 @@ raxmlng_tree_eval_prefix_rand = raxmlng_tree_eval_dir + "rand_{seed}"
 # File paths for IQ-Tree files
 output_files_iqtree_dir = output_files_dir + "iqtree/"
 
+# File paths for IQ-TREE inference
+iqtree_tree_inference_dir = output_files_iqtree_dir + "inference/"
+iqtree_tree_inference_prefix_pars = iqtree_tree_inference_dir + "pars_{seed}"
+iqtree_tree_inference_prefix_rand = iqtree_tree_inference_dir + "rand_{seed}"
+
 # File paths for parsimony trees
 output_files_parsimony_trees = output_files_dir + "parsimony/"
 parsimony_tree_file_name = output_files_parsimony_trees + "seed_{seed}.raxml.startTree"

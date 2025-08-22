@@ -83,6 +83,11 @@ iqtree_tree_inference_dir = output_files_iqtree_dir + "inference/"
 iqtree_tree_inference_prefix_pars = iqtree_tree_inference_dir + "pars_{seed}"
 iqtree_tree_inference_prefix_rand = iqtree_tree_inference_dir + "rand_{seed}"
 
+# IQ-TREE evaluation 
+iqtree_tree_eval_dir        = output_files_iqtree_dir + "evaluation/"
+iqtree_tree_eval_prefix_pars = iqtree_tree_eval_dir + "pars_{seed}"
+iqtree_tree_eval_prefix_rand = iqtree_tree_eval_dir + "rand_{seed}"
+
 # File paths for parsimony trees
 output_files_parsimony_trees = output_files_dir + "parsimony/"
 parsimony_tree_file_name = output_files_parsimony_trees + "seed_{seed}.raxml.startTree"
@@ -96,7 +101,7 @@ rule all:
         expand(iqtree_tree_inference_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=msa_names)
 
 include: "rules/iqtree_tree_inference.smk"
-include: "rules/raxmlng_tree_evaluation.smk"
+include: "rules/iqtree_tree_evaluation.smk"
 include: "rules/collect_data.smk"
 include: "rules/raxmlng_rfdistance.smk"
 include: "rules/iqtree_significance_tests.smk"

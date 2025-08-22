@@ -46,30 +46,29 @@ rule collect_search_trees:
 
 
 
+# Collect eval trees (IQ-TREE) -> AllEvalTrees.trees cho bước RF bằng RAxML-NG
 rule collect_eval_trees:
-    """
-    Rule that collects all eval trees for one dataset in one file.
-    """
     input:
-        raxmlng_pars_eval_trees = expand(raxmlng_tree_eval_prefix_pars + ".raxml.bestTree", seed=pars_seeds, allow_missing=True),
-        raxmlng_rand_eval_trees = expand(raxmlng_tree_eval_prefix_rand + ".raxml.bestTree", seed=rand_seeds, allow_missing=True)
+        pars = lambda wc: expand(iqtree_tree_eval_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=wc.msa),
+        rand = lambda wc: expand(iqtree_tree_eval_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=wc.msa)
     output:
-        all_eval_trees = f"{raxmlng_tree_eval_dir}AllEvalTrees.trees"
-    shell:
-        "cat {input.raxmlng_pars_eval_trees} {input.raxmlng_rand_eval_trees} > {output.all_eval_trees}"
+        all_eval_trees = iqtree_tree_eval_dir + "AllEvalTrees.trees"
+    run:
+        with open(output.all_eval_trees, "w") as out:
+            for p in list(input.pars) + list(input.rand):
+                with open(p) as f:
+                    out.write(f.read().strip() + "\n")
 
 
+# Collect eval logs (IQ-TREE) -> AllEvalLogs.log (nếu bạn còn dùng ở downstream)
 rule collect_eval_logs:
-    """
-    Rule that collects all eval logs for one dataset in one file.
-    """
     input:
-        raxmlng_pars_eval_logs = expand(raxmlng_tree_eval_prefix_pars + ".raxml.eval.log", seed=pars_seeds, allow_missing=True),
-        raxmlng_rand_eval_logs = expand(raxmlng_tree_eval_prefix_rand + ".raxml.eval.log", seed=rand_seeds, allow_missing=True)
+        pars = lambda wc: expand(iqtree_tree_eval_dir + "pars_{seed}.log", seed=pars_seeds, msa=wc.msa),
+        rand = lambda wc: expand(iqtree_tree_eval_dir + "rand_{seed}.log", seed=rand_seeds, msa=wc.msa)
     output:
-        all_eval_logs = f"{raxmlng_tree_eval_dir}AllEvalLogs.log"
+        all_eval_logs = iqtree_tree_eval_dir + "AllEvalLogs.log"
     shell:
-        "cat {input.raxmlng_pars_eval_logs} {input.raxmlng_rand_eval_logs} > {output.all_eval_logs}"
+        "cat {input.pars} {input.rand} > {output.all_eval_logs}"
 
 
 rule save_best_eval_tree:

@@ -11,17 +11,17 @@ rule collect_search_trees:
         "cat {input.raxmlng_pars_search_trees} {input.raxmlng_rand_search_trees} > {output.all_search_trees}"
 
 
-rule collect_search_logs:
-    """
-    Rule that collects all search logs for one dataset in one file.
-    """
-    input:
-        raxmlng_pars_search_logs = expand(raxmlng_tree_inference_prefix_pars + ".raxml.inference.log", seed=pars_seeds, allow_missing=True),
-        raxmlng_rand_search_logs = expand(raxmlng_tree_inference_prefix_rand + ".raxml.inference.log", seed=rand_seeds, allow_missing=True)
-    output:
-        all_search_logs = f"{raxmlng_tree_inference_dir}AllSearchLogs.log"
-    shell:
-        "cat {input.raxmlng_pars_search_logs} {input.raxmlng_rand_search_logs} > {output.all_search_logs}"
+#rule collect_search_logs:
+#    """
+#    Rule that collects all search logs for one dataset in one file.
+#    """
+#    input:
+#        raxmlng_pars_search_logs = expand(raxmlng_tree_inference_prefix_pars + ".raxml.inference.log", seed=pars_seeds, allow_missing=True),
+#        raxmlng_rand_search_logs = expand(raxmlng_tree_inference_prefix_rand + ".raxml.inference.log", seed=rand_seeds, allow_missing=True)
+#    output:
+#        all_search_logs = f"{raxmlng_tree_inference_dir}AllSearchLogs.log"
+#    shell:
+#        "cat {input.raxmlng_pars_search_logs} {input.raxmlng_rand_search_logs} > {output.all_search_logs}"
 
 
 

@@ -1,11 +1,6 @@
 rule raxmlng_rfdistance_search_trees:
-    """
-    Compute RF distances between ALL IQ-TREE search trees using RAxML-NG.
-    Input is the concatenated tree list from collect_search_trees (IQ-TREE .treefile).
-    """
     input:
-        # lấy từ IQ-TREE: AllSearchTrees.trees do collect_search_trees tạo
-        output_files_iqtree_dir + "AllSearchTrees.trees"
+        iqtree_tree_inference_dir + "AllSearchTrees.trees"
     output:
         rfDist     = f"{raxmlng_tree_inference_dir}inference.raxml.rfDistances",
         rfDist_log = f"{raxmlng_tree_inference_dir}inference.raxml.rfDistances.log",
@@ -14,11 +9,7 @@ rule raxmlng_rfdistance_search_trees:
     log:
         f"{raxmlng_tree_inference_dir}inference.raxml.rfDistances.snakelog",
     shell:
-        "{raxmlng_command} "
-        "--rfdist "
-        "--tree {input} "
-        "--prefix {params.prefix} "
-        ">> {output.rfDist_log} "
+        "{raxmlng_command} --rfdist --tree {input} --prefix {params.prefix} >> {output.rfDist_log} "
 
 
 rule raxmlng_rfdistance_eval_trees:

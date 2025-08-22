@@ -92,12 +92,8 @@ parsimony_log_file_name = output_files_parsimony_trees + "seed_{seed}.raxml.log"
 rule all:
     input:
         expand(f"{db_path}training_data.parquet", msa=msa_names),
-        expand(output_files_iqtree_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names),
-        expand(output_files_iqtree_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=msa_names),
-        expand(output_files_iqtree_dir + "pars_{seed}.model.gz", seed=pars_seeds, msa=msa_names),
-        expand(output_files_iqtree_dir + "rand_{seed}.model.gz", seed=rand_seeds, msa=msa_names),
-        expand(output_files_iqtree_dir + "pars_{seed}.log", seed=pars_seeds, msa=msa_names),
-        expand(output_files_iqtree_dir + "rand_{seed}.log", seed=rand_seeds, msa=msa_names)
+        expand(iqtree_tree_inference_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names),
+        expand(iqtree_tree_inference_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=msa_names)
 
 include: "rules/iqtree_tree_inference.smk"
 include: "rules/raxmlng_tree_evaluation.smk"

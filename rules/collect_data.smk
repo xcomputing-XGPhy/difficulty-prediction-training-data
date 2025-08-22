@@ -12,28 +12,23 @@
 
 rule collect_search_trees:
     """
-    Collect all IQ-TREE search trees (pars_* and rand_*) of the CURRENT msa into one file.
-    This produces AllSearchTrees.trees for later RF-distance with RAxML-NG.
+    Collect all IQ-TREE search trees (pars_* and rand_*) for the current MSA.
     """
     input:
         pars_trees = lambda wc: expand(
-            output_files_iqtree_dir + "pars_{seed}.treefile",
-            seed=pars_seeds,
-            msa=wc.msa
+            iqtree_tree_inference_dir + "pars_{seed}.treefile",
+            seed=pars_seeds, msa=wc.msa
         ),
         rand_trees = lambda wc: expand(
-            output_files_iqtree_dir + "rand_{seed}.treefile",
-            seed=rand_seeds,
-            msa=wc.msa
+            iqtree_tree_inference_dir + "rand_{seed}.treefile",
+            seed=rand_seeds, msa=wc.msa
         )
     output:
-        all_search_trees = output_files_iqtree_dir + "AllSearchTrees.trees"
+        all_search_trees = iqtree_tree_inference_dir + "AllSearchTrees.trees"
     run:
-        # ghi nối tiếp tất cả newick vào một file
         with open(output.all_search_trees, "w") as out:
             for path in list(input.pars_trees) + list(input.rand_trees):
                 with open(path) as f:
-                    # mỗi file .treefile thường có 1 dòng newick -> strip và thêm newline
                     out.write(f.read().strip() + "\n")
 
 

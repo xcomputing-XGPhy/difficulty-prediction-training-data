@@ -10,6 +10,21 @@
 #    shell:
 #        "cat {input.raxmlng_pars_search_trees} {input.raxmlng_rand_search_trees} > {output.all_search_trees}"
 
+rule collect_search_trees:
+    """
+    Collect all trees inferred by IQ-TREE from parsimony and random starts.
+    """
+    input:
+        pars_trees = expand(output_files_iqtree_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=lambda wildcards: wildcards.msa),
+        rand_trees = expand(output_files_iqtree_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=lambda wildcards: wildcards.msa)
+    output:
+        all_search_trees = output_files_iqtree_dir + "AllSearchTrees.trees"
+    run:
+        with open(output.all_search_trees, "w") as outfile:
+            for tree in input.pars_trees + input.rand_trees:
+                with open(tree) as infile:
+                    outfile.write(infile.read())
+
 
 #rule collect_search_logs:
 #    """

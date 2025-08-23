@@ -110,7 +110,7 @@ rule all:
         search_logs_collected = expand(iqtree_tree_inference_dir + "AllSearchLogs.log", msa=msa_names),
 
         # Tree search tree RFDistance logs
-        search_rfdistance = f"{iqtree_tree_inference_dir}inference.raxml.rfDistances.log",
+        search_rfdistance = expand(iqtree_tree_inference_dir + "inference.raxml.rfDistances.log", msa=msa_names),
 
         # Eval tree files and logs
         pars_eval_trees = expand(iqtree_tree_eval_dir + "pars_{seed}.treefile",  seed=pars_seeds, msa=msa_names, allow_missing=True),

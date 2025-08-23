@@ -102,21 +102,21 @@ rule all:
         expand(iqtree_tree_eval_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names),
         expand(iqtree_tree_eval_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=msa_names),
         # Tree seach tree files and logs
-        pars_search_trees   = expand(iqtree_tree_inference_prefix_pars + ".treefile",seed=pars_seeds,allow_missing=True),
-        pars_starting_trees = expand(iqtree_tree_inference_prefix_pars + ".bionj",seed=pars_seeds,allow_missing=True),
-        pars_search_logs    = expand(iqtree_tree_inference_prefix_pars + ".log",seed=pars_seeds,allow_missing=True),
-        rand_search_trees   = expand(iqtree_tree_inference_prefix_rand + ".treefile", seed=rand_seeds, allow_missing=True),
-        rand_search_logs    = expand(iqtree_tree_inference_prefix_rand + ".log",seed=rand_seeds,allow_missing=True),
+        pars_search_trees   = expand(iqtree_tree_inference_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names,allow_missing=True),
+        pars_starting_trees = expand(iqtree_tree_inference_dir + "pars_{seed}.bionj", seed=pars_seeds, msa=msa_names,allow_missing=True),
+        pars_search_logs    = expand(iqtree_tree_inference_dir + "pars_{seed}.log", seed=pars_seeds, msa=msa_names,allow_missing=True),
+        rand_search_trees   = expand(iqtree_tree_inference_dir + "rand_{seed}.treefile",  seed=rand_seeds, msa=msa_names, allow_missing=True),
+        rand_search_logs    = expand(iqtree_tree_inference_dir + "rand_{seed}.log", seed=rand_seeds, msa=msa_names,allow_missing=True),
         search_logs_collected = f"{iqtree_tree_inference_dir}AllSearchLogs.log",
 
         # Tree search tree RFDistance logs
         search_rfdistance = f"{iqtree_tree_inference_dir}inference.raxml.rfDistances.log",
 
         # Eval tree files and logs
-        pars_eval_trees = expand(iqtree_tree_eval_prefix_pars + ".treefile", seed=pars_seeds, allow_missing=True),
-        pars_eval_logs  = expand(iqtree_tree_eval_prefix_pars + ".log",seed=pars_seeds,allow_missing=True),
-        rand_eval_trees = expand(iqtree_tree_eval_prefix_rand + ".treefile", seed=rand_seeds, allow_missing=True),
-        rand_eval_logs  = expand(iqtree_tree_eval_prefix_rand + ".log",seed=rand_seeds,allow_missing=True),
+        pars_eval_trees = expand(iqtree_tree_eval_dir + "pars_{seed}.treefile",  seed=pars_seeds, msa=msa_names, allow_missing=True),
+        pars_eval_logs  = expand(iqtree_tree_eval_dir + "pars_{seed}.log", seed=pars_seeds, msa=msa_names,allow_missing=True),
+        rand_eval_trees = expand(iqtree_tree_eval_dir + "rand_{seed}.treefile",  seed=rand_seeds, msa=msa_names, allow_missing=True),
+        rand_eval_logs  = expand(iqtree_tree_eval_dir + "rand_{seed}.log", seed=rand_seeds, msa=msa_names,allow_missing=True),
         eval_logs_collected = f"{iqtree_tree_eval_dir}AllEvalLogs.log",
 
         # Eval tree RFDistance logs

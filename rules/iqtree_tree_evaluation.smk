@@ -23,7 +23,8 @@ rule reevaluate_iqtree_pars_tree:
         "-te {input.best_tree_of_run} "
         "-T {params.threads} "
         "--seed 0 "
-        "-redo"
+        "-redo "
+        "> {output.eval_log} "
 
 
 rule reevaluate_iqtree_rand_tree:

@@ -75,7 +75,7 @@ rule collect_plausible_trees:
         clusters = f"{output_files_iqtree_dir}filteredEvalTrees.clusters.pkl",
         all_eval_trees = rules.collect_eval_trees.output.all_eval_trees,
     output:
-        all_plausible_trees = f"{raxmlng_tree_eval_dir}AllPlausibleTrees.trees",
+        all_plausible_trees = f"{iqtree_tree_eval_dir}AllPlausibleTrees.trees",
     script:
         "scripts/collect_plausible_trees.py"
 

@@ -15,7 +15,6 @@ rule iqtree_pars_tree:
     log:
         f"{iqtree_tree_inference_prefix_pars}.snakelog",
     shell:
-        "mkdir -p $(dirname {params.prefix}) && "
         "{iqtree_command} "
         "-s {params.msa} "
         "-m {params.model} "
@@ -23,6 +22,7 @@ rule iqtree_pars_tree:
         "-seed {wildcards.seed} "
         "-t BIONJ "
         "-T {params.threads} "
+        "-redo "
         "> {output.iqtree_log} 2>&1"
 
 
@@ -37,9 +37,14 @@ rule iqtree_rand_tree:
         model   = lambda wc: iqtree_models[wc.msa],
         threads = config["software"]["iqtree"]["threads"]
     log:
-        iqtree_tree_inference_prefix_rand + ".snakelog"
+        f"{iqtree_tree_inference_prefix_rand}.snakelog",
     shell:
-        "mkdir -p $(dirname {params.prefix}) && "
-        "{iqtree_command} -s {params.msa} -m {params.model} -pre {params.prefix} "
-        "-nt {params.threads} -seed {wildcards.seed} -t RANDOM "
-        "> {log} 2>&1"
+        "{iqtree_command} "
+        "-s {params.msa} "
+        "-m {params.model} "
+        "-pre {params.prefix} "
+        "-seed {wildcards.seed} "
+        "-t RANDOM "
+        "-T {params.threads} "
+        "-redo "
+        "> {output.iqtree_log} 2>&1"

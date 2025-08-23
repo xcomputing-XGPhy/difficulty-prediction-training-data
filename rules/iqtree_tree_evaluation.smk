@@ -1,43 +1,55 @@
-# Re-evaluate pars start trees with IQ-TREE (fixed topology)
 rule reevaluate_iqtree_pars_tree:
+    """
+    Rule that re-evaluates the given parsimony search tree.
+    """
     input:
-        tree = iqtree_tree_inference_prefix_pars + ".treefile",
-        msa  = lambda wc: msas[wc.msa]
+        best_tree_of_run    = f"{iqtree_tree_inference_prefix_pars}.treefile"
     output:
-        tree  = iqtree_tree_eval_prefix_pars + ".treefile",
-        model = iqtree_tree_eval_prefix_pars + ".model.gz",
-        log   = iqtree_tree_eval_prefix_pars + ".log"
+        log         = f"{iqtree_tree_eval_prefix_pars}.log",
+        best_tree   = f"{iqtree_tree_eval_prefix_pars}.treefile",
+        eval_log    = f"{iqtree_tree_eval_prefix_pars}.iqtree",
     params:
         prefix  = iqtree_tree_eval_prefix_pars,
-        model   = lambda wc: iqtree_models[wc.msa],
+        msa     = lambda wildcards: msas[wildcards.msa],
+        model   = lambda wildcards: iqtree_models[wildcards.msa],
         threads = config["software"]["iqtree"]["threads"]
     log:
-        iqtree_tree_eval_prefix_pars + ".snakelog"
+        f"{iqtree_tree_eval_prefix_pars}.snakelog"
     shell:
-        # -te: dùng topology input, -n 0: không search, chỉ tối ưu trên topology đó
-        "mkdir -p $(dirname {params.prefix}) && "
-        "{iqtree_command} -s {input.msa} -m {params.model} -pre {params.prefix} "
-        "-nt {params.threads} -seed {wildcards.seed} -te {input.tree} -n 0 "
-        "> {log} 2>&1"
+        "{iqtree_command} "
+        "-s {params.msa} "
+        "-m {params.model} "
+        "-pre {params.prefix} "
+        "-te {input.best_tree_of_run} "
+        "-T {params.threads} "
+        "--seed 0 "
+        "-redo"
 
 
-# Re-evaluate rand start trees with IQ-TREE (fixed topology)
 rule reevaluate_iqtree_rand_tree:
+    """
+    Rule that re-evaluates the given random search tree.
+    """
     input:
-        tree = iqtree_tree_inference_prefix_rand + ".treefile",
-        msa  = lambda wc: msas[wc.msa]
+        best_tree_of_run    = f"{iqtree_tree_inference_prefix_rand}.treefile"
     output:
-        tree  = iqtree_tree_eval_prefix_rand + ".treefile",
-        model = iqtree_tree_eval_prefix_rand + ".model.gz",
-        log   = iqtree_tree_eval_prefix_rand + ".log"
+        log         = f"{iqtree_tree_eval_prefix_rand}.log",
+        best_tree   = f"{iqtree_tree_eval_prefix_rand}.treefile",
+        eval_log    = f"{iqtree_tree_eval_prefix_rand}.iqtree",
     params:
         prefix  = iqtree_tree_eval_prefix_rand,
-        model   = lambda wc: iqtree_models[wc.msa],
+        msa     = lambda wildcards: msas[wildcards.msa],
+        model   = lambda wildcards: iqtree_models[wildcards.msa],
         threads = config["software"]["iqtree"]["threads"]
     log:
-        iqtree_tree_eval_prefix_rand + ".snakelog"
+        f"{iqtree_tree_eval_prefix_rand}.snakelog"
     shell:
-        "mkdir -p $(dirname {params.prefix}) && "
-        "{iqtree_command} -s {input.msa} -m {params.model} -pre {params.prefix} "
-        "-nt {params.threads} -seed {wildcards.seed} -te {input.tree} -n 0 "
-        "> {log} 2>&1"
+        "{iqtree_command} "
+        "-s {params.msa} "
+        "-m {params.model} "
+        "-pre {params.prefix} "
+        "-te {input.best_tree_of_run} "
+        "-T {params.threads} "
+        "--seed 0 "
+        "-redo "
+        "> {output.eval_log} "

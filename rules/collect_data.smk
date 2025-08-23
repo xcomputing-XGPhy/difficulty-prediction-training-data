@@ -1,74 +1,55 @@
-#rule collect_search_trees:
-#    """
-#    Rule that collects all search trees for one dataset in one file.
-#    """
-#    input:
-#        raxmlng_pars_search_trees = expand(raxmlng_tree_inference_prefix_pars + ".raxml.bestTree", seed=pars_seeds, allow_missing=True),
-#        raxmlng_rand_search_trees = expand(raxmlng_tree_inference_prefix_rand + ".raxml.bestTree", seed=rand_seeds, allow_missing=True)
-#    output:
-#        all_search_trees = f"{raxmlng_tree_inference_dir}AllSearchTrees.trees"
-#    shell:
-#        "cat {input.raxmlng_pars_search_trees} {input.raxmlng_rand_search_trees} > {output.all_search_trees}"
-
 rule collect_search_trees:
     """
-    Collect all IQ-TREE search trees (pars_* and rand_*) for the current MSA.
+    Rule that collects all search trees for one dataset in one file.
     """
     input:
-        pars_trees = lambda wc: expand(
-            iqtree_tree_inference_dir + "pars_{seed}.treefile",
-            seed=pars_seeds, msa=wc.msa
-        ),
-        rand_trees = lambda wc: expand(
-            iqtree_tree_inference_dir + "rand_{seed}.treefile",
-            seed=rand_seeds, msa=wc.msa
-        )
+        iqtree_pars_search_trees = expand(iqtree_tree_inference_prefix_pars + ".treefile", seed=pars_seeds, allow_missing=True),
+        iqtree_rand_search_trees = expand(iqtree_tree_inference_prefix_rand + ".treefile", seed=rand_seeds, allow_missing=True)
     output:
-        all_search_trees = iqtree_tree_inference_dir + "AllSearchTrees.trees"
-    run:
-        with open(output.all_search_trees, "w") as out:
-            for path in list(input.pars_trees) + list(input.rand_trees):
-                with open(path) as f:
-                    out.write(f.read().strip() + "\n")
-
-
-#rule collect_search_logs:
-#    """
-#    Rule that collects all search logs for one dataset in one file.
-#    """
-#    input:
-#        raxmlng_pars_search_logs = expand(raxmlng_tree_inference_prefix_pars + ".raxml.inference.log", seed=pars_seeds, allow_missing=True),
-#        raxmlng_rand_search_logs = expand(raxmlng_tree_inference_prefix_rand + ".raxml.inference.log", seed=rand_seeds, allow_missing=True)
-#    output:
-#        all_search_logs = f"{raxmlng_tree_inference_dir}AllSearchLogs.log"
-#    shell:
-#        "cat {input.raxmlng_pars_search_logs} {input.raxmlng_rand_search_logs} > {output.all_search_logs}"
-
-
-
-# Collect eval trees (IQ-TREE) -> AllEvalTrees.trees cho bước RF bằng RAxML-NG
-rule collect_eval_trees:
-    input:
-        pars = lambda wc: expand(iqtree_tree_eval_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=wc.msa),
-        rand = lambda wc: expand(iqtree_tree_eval_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=wc.msa)
-    output:
-        all_eval_trees = iqtree_tree_eval_dir + "AllEvalTrees.trees"
-    run:
-        with open(output.all_eval_trees, "w") as out:
-            for p in list(input.pars) + list(input.rand):
-                with open(p) as f:
-                    out.write(f.read().strip() + "\n")
-
-
-# Collect eval logs (IQ-TREE) -> AllEvalLogs.log (nếu bạn còn dùng ở downstream)
-rule collect_eval_logs:
-    input:
-        pars = lambda wc: expand(iqtree_tree_eval_dir + "pars_{seed}.log", seed=pars_seeds, msa=wc.msa),
-        rand = lambda wc: expand(iqtree_tree_eval_dir + "rand_{seed}.log", seed=rand_seeds, msa=wc.msa)
-    output:
-        all_eval_logs = iqtree_tree_eval_dir + "AllEvalLogs.log"
+        all_search_trees = f"{iqtree_tree_inference_dir}AllSearchTrees.trees"
     shell:
-        "cat {input.pars} {input.rand} > {output.all_eval_logs}"
+        "cat {input.iqtree_pars_search_trees} {input.iqtree_rand_search_trees} > {output.all_search_trees}"
+
+
+rule collect_search_logs:
+    """
+    Rule that collects all search logs for one dataset in one file.
+    """
+    input:
+        iqtree_pars_search_logs = expand(iqtree_tree_inference_prefix_pars + ".log", seed=pars_seeds, allow_missing=True),
+        iqtree_rand_search_logs = expand(iqtree_tree_inference_prefix_rand + ".log", seed=rand_seeds, allow_missing=True)
+    output:
+        all_search_logs = f"{iqtree_tree_inference_dir}AllSearchLogs.log"
+    shell:
+        "cat {input.iqtree_pars_search_logs} {input.iqtree_rand_search_logs} > {output.all_search_logs}"
+
+
+
+rule collect_eval_trees:
+    """
+    Rule that collects all eval trees for one dataset in one file.
+    """
+    input:
+        iqtree_pars_eval_trees = expand(iqtree_tree_eval_prefix_pars + ".treefile", seed=pars_seeds, allow_missing=True),
+        iqtree_rand_eval_trees = expand(iqtree_tree_eval_prefix_rand + ".treefile", seed=rand_seeds, allow_missing=True)
+    output:
+        all_eval_trees = f"{iqtree_tree_eval_dir}AllEvalTrees.trees"
+    shell:
+        "cat {input.iqtree_pars_eval_trees} {input.iqtree_rand_eval_trees} > {output.all_eval_trees}"
+
+
+rule collect_eval_logs:
+    """
+    Rule that collects all eval logs for one dataset in one file.
+    """
+    input:
+        iqtree_pars_eval_logs = expand(iqtree_tree_eval_prefix_pars + ".log", seed=pars_seeds, allow_missing=True),
+        iqtree_rand_eval_logs = expand(iqtree_tree_eval_prefix_rand + ".log", seed=rand_seeds, allow_missing=True)
+    output:
+        all_eval_logs = f"{iqtree_tree_eval_dir}AllEvalLogs.log"
+    shell:
+        "cat {input.iqtree_pars_eval_logs} {input.iqtree_rand_eval_logs} > {output.all_eval_logs}"
+
 
 
 rule save_best_eval_tree:
@@ -80,7 +61,7 @@ rule save_best_eval_tree:
         all_eval_trees = rules.collect_eval_trees.output.all_eval_trees,
         all_eval_logs= rules.collect_eval_logs.output.all_eval_logs,
     output:
-        best_eval_tree = f"{raxmlng_tree_eval_dir}BestEvalTree.tree"
+        best_eval_tree = f"{iqtree_tree_eval_dir}BestEvalTree.tree"
     script:
         "scripts/save_best_eval_tree.py"
 
@@ -92,7 +73,7 @@ rule collect_plausible_trees:
     input:
         iqtree_results = f"{output_files_iqtree_dir}significance.iqtree",
         clusters = f"{output_files_iqtree_dir}filteredEvalTrees.clusters.pkl",
-        eval_trees = f"{raxmlng_tree_eval_dir}AllEvalTrees.trees",
+        all_eval_trees = rules.collect_eval_trees_iqt.output.all_eval_trees,
     output:
         all_plausible_trees = f"{raxmlng_tree_eval_dir}AllPlausibleTrees.trees",
     script:

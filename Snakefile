@@ -104,7 +104,7 @@ rule all:
 
 include: "rules/iqtree_tree_inference.smk"
 include: "rules/iqtree_tree_evaluation.smk"
-#include: "rules/collect_data.smk"
+include: "rules/collect_data.smk"
 #include: "rules/raxmlng_rfdistance.smk"
 #include: "rules/iqtree_significance_tests.smk"
 #include: "rules/msa_features.smk"

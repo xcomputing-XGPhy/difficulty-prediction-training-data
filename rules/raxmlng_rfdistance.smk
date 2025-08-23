@@ -1,31 +1,37 @@
 rule raxmlng_rfdistance_search_trees:
+    """
+    Rule that computes the RF-Distances between all search trees using RAxML-NG.
+    """
     input:
-        iqtree_tree_inference_dir + "AllSearchTrees.trees"
+        all_search_trees = rules.collect_search_trees.output.all_search_trees
     output:
-        rfDist     = f"{raxmlng_tree_inference_dir}inference.raxml.rfDistances",
-        rfDist_log = f"{raxmlng_tree_inference_dir}inference.raxml.rfDistances.log",
+        rfDist      = f"{iqtree_tree_inference_dir}inference.raxml.rfDistances",
+        rfDist_log  = f"{iqtree_tree_inference_dir}inference.raxml.rfDistances.log",
     params:
-        prefix = f"{raxmlng_tree_inference_dir}inference"
+        prefix = f"{iqtree_tree_inference_dir}inference"
     log:
-        f"{raxmlng_tree_inference_dir}inference.raxml.rfDistances.snakelog",
+        f"{iqtree_tree_inference_dir}inference.raxml.rfDistances.snakelog",
     shell:
-        "{raxmlng_command} --rfdist --tree {input} --prefix {params.prefix} >> {output.rfDist_log} "
+        "{raxmlng_command} "
+        "--rfdist "
+        "--tree {input.all_search_trees} "
+        "--prefix {params.prefix} "
+        ">> {output.rfDist_log} "
 
 
 rule raxmlng_rfdistance_eval_trees:
     """
-    Compute RF distances between ALL eval trees using RAxML-NG.
-    (giữ nguyên nguồn eval từ rule collect_eval_trees hiện có)
+    Rule that computes the RF-Distances between all eval trees using RAxML-NG.
     """
     input:
         all_eval_trees = rules.collect_eval_trees.output.all_eval_trees
     output:
-        rfDist     = f"{raxmlng_tree_eval_dir}eval.raxml.rfDistances",
-        rfDist_log = f"{raxmlng_tree_eval_dir}eval.raxml.rfDistances.log",
+        rfDist      = f"{iqtree_tree_eval_dir}eval.raxml.rfDistances",
+        rfDist_log  = f"{iqtree_tree_eval_dir}eval.raxml.rfDistances.log",
     params:
-        prefix = f"{raxmlng_tree_eval_dir}eval"
+        prefix = f"{iqtree_tree_eval_dir}eval"
     log:
-        f"{raxmlng_tree_eval_dir}eval.raxml.rfDistances.snakelog",
+        f"{iqtree_tree_eval_dir}eval.raxml.rfDistances.snakelog",
     shell:
         "{raxmlng_command} "
         "--rfdist "
@@ -34,47 +40,48 @@ rule raxmlng_rfdistance_eval_trees:
         ">> {output.rfDist_log} "
 
 
-rule raxmlng_rfdistance_plausible_trees:
+rule iqtree_rfdistance_plausible_trees:
     """
-    Compute RF distances between ALL plausible trees using RAxML-NG.
-    Nếu số cây plausible <= 1, ghi log/đầu ra dummy để tránh lỗi.
+    Rule that computes the RF-Distances between all plausible trees using RAxML-NG.
     """
     input:
         all_plausible_trees = rules.collect_plausible_trees.output.all_plausible_trees
     output:
-        rfDist     = f"{raxmlng_tree_eval_dir}plausible.raxml.rfDistances",
-        rfDist_log = f"{raxmlng_tree_eval_dir}plausible.raxml.rfDistances.log",
+        rfDist      = f"{iqtree_tree_eval_dir}plausible.raxml.rfDistances",
+        rfDist_log  = f"{iqtree_tree_eval_dir}plausible.raxml.rfDistances.log",
     params:
-        prefix = f"{raxmlng_tree_eval_dir}plausible"
+        prefix = f"{iqtree_tree_eval_dir}plausible"
     log:
-        f"{raxmlng_tree_eval_dir}plausible.raxml.rfDistances.snakelog",
+        f"{iqtree_tree_eval_dir}plausible.raxml.rfDistances.snakelog",
     run:
-        num_plausible = sum(1 for _ in open(input.all_plausible_trees))
+        num_plausible = len(open(input.all_plausible_trees).readlines())
+        # we need this distinction because RAxML-NG requires more than one tree in the input file
+        # in order to compute the RF Distance
+        # but there might be no plausible trees for a given dataset
         if num_plausible <= 1:
+            # write 0.0 as RF-Distance in a dummy log
             with open(output.rfDist_log, "w") as f:
-                f.write(
-                    "Number of unique topologies in this tree set: 1\n"
-                    "Average absolute RF distance in this tree set: 0.0\n"
-                    "Average relative RF distance in this tree set: 0.0\n"
-                )
+                f.write("""
+                Number of unique topologies in this tree set: 1
+                Average absolute RF distance in this tree set: 0.0
+                Average relative RF distance in this tree set: 0.0
+                """)
+
             with open(output.rfDist, "w") as f:
-                f.write("0 1 0.0 0.0\n")
+                f.write("0 1 0.0 0.0")
         else:
-            shell(
-                "{raxmlng_command} --rfdist --tree {input.all_plausible_trees} "
-                "--prefix {params.prefix} >> {output.rfDist_log}"
-            )
+            shell("{raxmlng_command} --rfdist --tree {input.all_plausible_trees} --prefix {params.prefix} >> {output.rfDist_log}")
 
 
 rule raxmlng_rfdistance_parsimony_trees:
     """
-    Compute RF distances between ALL Parsimonator parsimony trees using RAxML-NG.
+    Rule that computes the RF-Distances between all parsimony trees inferred with Parsimonator using RAxML-NG.
     """
     input:
         all_parsimony_trees = f"{output_files_parsimony_trees}AllParsimonyTrees.trees",
     output:
-        rfDist     = f"{output_files_parsimony_trees}parsimony.raxml.rfDistances",
-        rfDist_log = f"{output_files_parsimony_trees}parsimony.raxml.rfDistances.log",
+        rfDist      = f"{output_files_parsimony_trees}parsimony.raxml.rfDistances",
+        rfDist_log  = f"{output_files_parsimony_trees}parsimony.raxml.rfDistances.log",
     params:
         prefix = f"{output_files_parsimony_trees}parsimony"
     log:

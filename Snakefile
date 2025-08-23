@@ -98,10 +98,12 @@ rule all:
     input:
 #        expand(f"{db_path}training_data.parquet", msa=msa_names),
         expand(iqtree_tree_inference_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names),
-        expand(iqtree_tree_inference_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=msa_names)
+        expand(iqtree_tree_inference_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=msa_names),
+        expand(iqtree_tree_eval_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names),
+        expand(iqtree_tree_eval_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=msa_names)
 
 include: "rules/iqtree_tree_inference.smk"
-#include: "rules/iqtree_tree_evaluation.smk"
+include: "rules/iqtree_tree_evaluation.smk"
 #include: "rules/collect_data.smk"
 #include: "rules/raxmlng_rfdistance.smk"
 #include: "rules/iqtree_significance_tests.smk"

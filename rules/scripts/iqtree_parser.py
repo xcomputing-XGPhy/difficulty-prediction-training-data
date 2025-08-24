@@ -10,7 +10,7 @@ from utils import (
     read_file_contents,
 )
 
-from pypythia.iqtree import IQTree
+from pyythia.iqtree import IQTree
 
 
 def get_iqtree_llh(iqtree_file: FilePath) -> float:

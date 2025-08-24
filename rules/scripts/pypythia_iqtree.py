@@ -1,6 +1,6 @@
 from pypythia.custom_types import *
-from pypythia.custom_errors import IQTreeError
-from pypythia.iqtree_parser import *
+from pypythia_custom_errors import IQTreeError
+from pypythia_iqtree_parser import *
 
 from tempfile import TemporaryDirectory
 import os

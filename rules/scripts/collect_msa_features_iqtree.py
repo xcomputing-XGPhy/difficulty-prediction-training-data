@@ -12,6 +12,8 @@ msa = MSA(msa_file)
 # so for morphological data we cannot compute the treelikeness at the moment
 compute_treelikeness = msa.data_type != "MORPH"
 
+IQTree = IQTree(snakemake.params.iqtree_command)
+
 patterns, gaps, invariant = get_patterns_gaps_invariant(msa_file, model)
 
 msa_features = {

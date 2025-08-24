@@ -1,7 +1,7 @@
 import json
 
 from pypythia.msa import MSA
-from iqtree_parser import get_patterns_gaps_invariant
+from pypythia_iqtree import IQTree
 
 msa_file = snakemake.params.msa
 model = snakemake.params.model
@@ -12,8 +12,7 @@ msa = MSA(msa_file)
 # so for morphological data we cannot compute the treelikeness at the moment
 compute_treelikeness = msa.data_type != "MORPH"
 
-# Use IQ-Tree parser instead of RAxML-NG
-patterns, gaps, invariant = get_patterns_gaps_invariant(msa_file)
+patterns, gaps, invariant = get_patterns_gaps_invariant(msa_file, model)
 
 msa_features = {
     "taxa": msa.number_of_taxa(),

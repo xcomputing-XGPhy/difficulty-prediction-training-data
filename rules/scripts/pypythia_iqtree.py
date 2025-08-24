@@ -55,7 +55,7 @@ class IQTree:
     def _run_alignment_parse(
             self, msa_file: FilePath, model: Model, prefix: str, **kwargs
     ) -> None:
-        cmd = self._base_cmd(msa_file, model, prefix, parse=None, **kwargs)
+        cmd = self._base_cmd(msa_file, model, prefix, **kwargs)
         run_iqtree_command(cmd)
 
     def _run_rfdist(self, trees_file: FilePath, prefix: str, **kwargs) -> None:

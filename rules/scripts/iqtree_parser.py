@@ -15,7 +15,7 @@ from pypythia_iqtree import IQTree
 
 def get_iqtree_llh(iqtree_file: FilePath) -> float:
     """Get the final log-likelihood from IQ-Tree log file."""
-    STR = "Log-likelihood:"
+    STR = "Optimal log-likelihood:"
     return get_single_value_from_file(iqtree_file, STR)
 
 

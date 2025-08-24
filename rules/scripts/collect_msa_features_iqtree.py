@@ -1,0 +1,31 @@
+import json
+
+from pypythia.msa import MSA
+from iqtree_parser import get_patterns_gaps_invariant
+
+msa_file = snakemake.params.msa
+model = snakemake.params.model
+
+msa = MSA(msa_file)
+
+# the Biopython DistanceCalculator does not support morphological data
+# so for morphological data we cannot compute the treelikeness at the moment
+compute_treelikeness = msa.data_type != "MORPH"
+
+# Use IQ-Tree parser instead of RAxML-NG
+patterns, gaps, invariant = get_patterns_gaps_invariant(msa_file)
+
+msa_features = {
+    "taxa": msa.number_of_taxa(),
+    "sites": msa.number_of_sites(),
+    "patterns": patterns,
+    "gaps": gaps,
+    "invariant": invariant,
+    "entropy": msa.entropy(),
+    "column_entropies": msa.column_entropies(),
+    "bollback": msa.bollback_multinomial(),
+    "treelikeness": msa.treelikeness_score() if compute_treelikeness else None,
+}
+
+with open(snakemake.output.msa_features, "w") as f:
+    json.dump(msa_features, f)

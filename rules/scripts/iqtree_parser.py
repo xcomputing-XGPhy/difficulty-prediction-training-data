@@ -39,7 +39,7 @@ def get_iqtree_starting_llh(iqtree_file: FilePath) -> float:
 
 def get_all_iqtree_llhs(iqtree_file: FilePath) -> List[float]:
     """Get all log-likelihood values from IQ-Tree log file."""
-    STR = "Log-likelihood:"
+    STR = "log-likelihood:"
     return get_multiple_values_from_file(iqtree_file, STR)
 
 

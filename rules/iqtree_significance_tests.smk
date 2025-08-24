@@ -14,7 +14,7 @@ rule iqtree_filter_unique_tree_topologies:
         filtered_trees  = f"{output_files_iqtree_dir}filteredEvalTrees.trees",
         clusters        = f"{output_files_iqtree_dir}filteredEvalTrees.clusters.pkl",
     script:
-        "scripts/filter_tree_topologies_iqtree.py"  # Use IQ-Tree script
+        "scripts/filter_tree_topologies.py"  
 
 
 rule iqtree_significance_tests_on_eval_trees:

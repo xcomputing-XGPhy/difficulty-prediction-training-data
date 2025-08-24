@@ -73,7 +73,7 @@ rule collect_plausible_trees:
     input:
         iqtree_results = f"{output_files_iqtree_dir}significance.iqtree",
         clusters = f"{output_files_iqtree_dir}filteredEvalTrees.clusters.pkl",
-        all_eval_trees = rules.collect_eval_trees.output.all_eval_trees,
+        eval_trees = rules.collect_eval_trees.output.all_eval_trees,
     output:
         all_plausible_trees = f"{iqtree_tree_eval_dir}AllPlausibleTrees.trees",
     script:

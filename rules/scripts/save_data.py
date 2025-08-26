@@ -17,6 +17,11 @@ from raxmlng_parser import (
     get_raxmlng_runtimes
 )
 
+from iqtree_parser import (
+    get_all_iqtree_llhs,
+    get_iqtree_runtimes,
+)
+
 from pypythia.raxmlng_parser import get_raxmlng_rfdist_results
 
 from tree_metrics import (
@@ -41,6 +46,7 @@ db.create_tables(
 )
 dataset_name = snakemake.wildcards.msa
 raxmlng_command = snakemake.params.raxmlng_command
+iqtree_command = snakemake.params.iqtree_command
 
 # tree search
 pars_search_trees = snakemake.input.pars_search_trees
@@ -75,11 +81,11 @@ parsimony_trees = snakemake.input.parsimony_trees
 parsimony_logs = snakemake.input.parsimony_logs
 parsimony_rfdistance = snakemake.input.parsimony_rfdistance
 
-llhs_search = get_all_raxmlng_llhs(search_logs_collected)
-llhs_eval = get_all_raxmlng_llhs(eval_logs_collected)
+llhs_search = get_all_iqtree_llhs(search_logs_collected)
+llhs_eval = get_all_iqtree_llhs(eval_logs_collected)
 
 parsimony_scores = get_all_parsimony_scores(parsimony_logs)
-parsimony_runtimes = get_raxmlng_runtimes(parsimony_logs)
+parsimony_runtimes = get_iqtree_runtimes(parsimony_logs)
 
 num_searches = len(pars_search_trees) + len(rand_search_trees)
 data_type = MSA(snakemake.params.msa).data_type
@@ -260,9 +266,9 @@ def save_raxmlng_tree(search_trees, search_logs, eval_trees, eval_logs, starting
 
     return plausible_llhs
 
-# store the parsimony and random raxml-ng trees in the database
-plausible_llhs_pars = save_raxmlng_tree(pars_search_trees, pars_search_logs, pars_eval_trees, pars_eval_logs, "parsimony")
-plausible_llhs_rand = save_raxmlng_tree(rand_search_trees, rand_search_logs, rand_eval_trees, rand_eval_logs, "random")
+# store the parsimony and random iqtree trees in the database
+plausible_llhs_pars = save_iqtree_tree(pars_search_trees, pars_search_logs, pars_eval_trees, pars_eval_logs, "parsimony")
+plausible_llhs_rand = save_iqtree_tree(rand_search_trees, rand_search_logs, rand_eval_trees, rand_eval_logs, "random")
 
 plausible_llhs = plausible_llhs_pars + plausible_llhs_rand
 dataset_dbobj.update(

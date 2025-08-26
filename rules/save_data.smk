@@ -39,10 +39,11 @@ rule save_data:
     output:
         database = "{msa}_data.sqlite3"
     params:
-        iqtree_command = iqtree_command,  # Use IQ-Tree command instead
+        iqtree_command = iqtree_command,  
+        raxml_command = raxml_command,
         msa             = lambda wildcards: msas[wildcards.msa],
     script:
-        "scripts/save_data_iqtree.py"  # Use IQ-Tree script
+        "scripts/save_data.py"  
 
 
 rule move_db:

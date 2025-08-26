@@ -94,10 +94,45 @@ def get_iqtree_runtimes(log_file: FilePath) -> List[float]:
 
 
 def get_iqtree_num_iterations(log_file: FilePath) -> Tuple[int, int]:
-    """Get the number of iterations from IQ-Tree log file."""
-    # IQ-Tree doesn't have SPR rounds like RAxML-NG, but we can track iterations
-    # For now, return placeholder values
-    return 0, 0
+    """Get the number of iterations from IQ-Tree log file.
+
+    Returns a tuple (num_iterations, placeholder) to mirror RAxML-NG API shape.
+    """
+    content = read_file_contents(log_file)
+
+    num_iterations = None
+
+    for line in content:
+        line = line.strip()
+        if line.startswith("Total number of iterations:"):
+            try:
+                _, value = line.split(":", 1)
+                num_iterations = int(value.strip())
+                break
+            except Exception:
+                continue
+        if "TREE SEARCH COMPLETED AFTER" in line and "ITERATIONS" in line:
+            try:
+                # e.g., TREE SEARCH COMPLETED AFTER 113 ITERATIONS / Time: 0h:3m:28s
+                import re
+                m = re.search(r"AFTER\s+(\d+)\s+ITERATIONS", line)
+                if m:
+                    num_iterations = int(m.group(1))
+                    break
+            except Exception:
+                continue
+        if line.startswith("Number of iterations:"):
+            try:
+                _, value = line.split(":", 1)
+                num_iterations = int(value.strip())
+                break
+            except Exception:
+                continue
+
+    if num_iterations is None:
+        num_iterations = 0
+
+    return num_iterations, 0
 
 
 def rel_rfdistance_starting_final(

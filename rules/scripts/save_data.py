@@ -22,7 +22,8 @@ from iqtree_parser import (
     get_iqtree_runtimes,
     get_iqtree_llh,
     get_iqtree_starting_llh,
-    get_model_parameter_estimates
+    get_model_parameter_estimates,
+    get_iqtree_num_iterations
 )
 
 from pypythia.raxmlng_parser import get_raxmlng_rfdist_results
@@ -98,7 +99,7 @@ single_tree = pars_search_trees[0]
 single_tree_log = pars_search_logs[0]
 single_tree_starting = pars_starting_trees[0]
 
-slow_spr, fast_spr = get_raxmlng_num_spr_rounds(single_tree_log)
+slow_spr, fast_spr = get_iqtree_num_iterations(single_tree_log)
 starting_llh = get_iqtree_starting_llh(single_tree_log)
 final_llh = get_iqtree_llh(single_tree_log)
 newick_starting = open(single_tree_starting).readline()
@@ -177,14 +178,14 @@ dataset_dbobj = Dataset.create(
 from parse_iqtree_logs import parse_iqtree_log
 from iqtree_statstest_parser import get_iqtree_results, get_iqtree_results_for_eval_tree_str
 
-def save_iqtree_tree(iqtree_trees, iqtree_logs, starting_type):
+def save_iqtree_tree(search_trees, search_logs, eval_trees, eval_logs, starting_type):
     plausible_llhs = []
 
-    for tree_file, log_file in zip(iqtree_trees, iqtree_logs):
-        newick = open(tree_file).readline()
-        statstest_results, cluster_id = get_iqtree_results_for_eval_tree_str(iqtree_results, newick, clusters)
+    for search_tree, search_log, eval_tree, eval_log in zip(search_trees, search_logs, eval_trees, eval_logs):
+        newick_eval = open(eval_tree).readline()
+        statstest_results, cluster_id = get_iqtree_results_for_eval_tree_str(iqtree_results, newick_eval, clusters)
         tests = statstest_results["tests"]
-        log_data = parse_iqtree_log(log_file)
+        log_data = parse_iqtree_log(search_log)
 
         IQTreeTree.create(
             dataset=dataset_dbobj,
@@ -192,7 +193,7 @@ def save_iqtree_tree(iqtree_trees, iqtree_logs, starting_type):
             uuid=uuid.uuid4().hex,
 
             starting_type=starting_type,
-            newick_search=newick,
+            newick_search=open(search_tree).readline(),
             llh_search=log_data["log_likelihood"],
             compute_time_search=log_data["runtime"],
 

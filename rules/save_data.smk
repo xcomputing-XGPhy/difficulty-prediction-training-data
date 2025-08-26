@@ -40,7 +40,7 @@ rule save_data:
         database = "{msa}_data.sqlite3"
     params:
         iqtree_command = iqtree_command,  
-        raxml_command = raxml_command,
+        raxmlng_command = raxmlng_command,
         msa             = lambda wildcards: msas[wildcards.msa],
     script:
         "scripts/save_data.py"  

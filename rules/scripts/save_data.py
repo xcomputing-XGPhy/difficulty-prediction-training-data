@@ -20,6 +20,9 @@ from raxmlng_parser import (
 from iqtree_parser import (
     get_all_iqtree_llhs,
     get_iqtree_runtimes,
+    get_iqtree_llh,
+    get_iqtree_starting_llh,
+    get_model_parameter_estimates
 )
 
 from pypythia.raxmlng_parser import get_raxmlng_rfdist_results
@@ -96,8 +99,8 @@ single_tree_log = pars_search_logs[0]
 single_tree_starting = pars_starting_trees[0]
 
 slow_spr, fast_spr = get_raxmlng_num_spr_rounds(single_tree_log)
-starting_llh = get_raxmlng_starting_llh(single_tree_log)
-final_llh = get_raxmlng_llh(single_tree_log)
+starting_llh = get_iqtree_starting_llh(single_tree_log)
+final_llh = get_iqtree_llh(single_tree_log)
 newick_starting = open(single_tree_starting).readline()
 newick_final = open(single_tree).readline()
 rate_het, base_freq, subst_rates = get_model_parameter_estimates(single_tree_log)

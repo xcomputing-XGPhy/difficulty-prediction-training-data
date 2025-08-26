@@ -85,7 +85,7 @@ llhs_search = get_all_iqtree_llhs(search_logs_collected)
 llhs_eval = get_all_iqtree_llhs(eval_logs_collected)
 
 parsimony_scores = get_all_parsimony_scores(parsimony_logs)
-parsimony_runtimes = get_iqtree_runtimes(parsimony_logs)
+parsimony_runtimes = get_raxmlng_runtimes(parsimony_logs)
 
 num_searches = len(pars_search_trees) + len(rand_search_trees)
 data_type = MSA(snakemake.params.msa).data_type

@@ -4,8 +4,8 @@ rule iqtree_pars_tree:
     """
     output:
         iqtree_best_tree     = f"{iqtree_tree_inference_prefix_pars}.treefile",
-        iqtree_starting_tree = f"{iqtree_tree_inference_prefix_pars}.bionj",
-        iqtree_best_model    = f"{iqtree_tree_inference_prefix_pars}.iqtree",
+        iqtree_starting_tree = f"{iqtree_tree_inference_prefix_pars}.iqtree",
+        iqtree_best_model    = f"{iqtree_tree_inference_prefix_pars}.model.gz",
         iqtree_log           = f"{iqtree_tree_inference_prefix_pars}.log",
     params:
         prefix  = iqtree_tree_inference_prefix_pars,
@@ -17,12 +17,12 @@ rule iqtree_pars_tree:
     shell:
         "{iqtree_command} "
         "-s {params.msa} "
-        "-m {params.model} "
         "-pre {params.prefix} "
         "-seed {wildcards.seed} "
-        "-t BIONJ "
+        "-ninit 1 "
         "-T {params.threads} "
         "-redo "
+        "-n 0 "
         "> {output.iqtree_log} 2>&1"
 
 
@@ -41,10 +41,13 @@ rule iqtree_rand_tree:
     shell:
         "{iqtree_command} "
         "-s {params.msa} "
-        "-m {params.model} "
         "-pre {params.prefix} "
         "-seed {wildcards.seed} "
         "-t RANDOM "
         "-T {params.threads} "
         "-redo "
+        "-n 3 "
+        "-ninit 10 "
+        "-van "
+        "-van_nni_count 10 "
         "> {output.iqtree_log} 2>&1"

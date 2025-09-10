@@ -103,7 +103,7 @@ rule all:
         expand(iqtree_tree_eval_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=msa_names),
         # Tree seach tree files and logs
         pars_search_trees   = expand(iqtree_tree_inference_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names,allow_missing=True),
-        pars_starting_trees = expand(iqtree_tree_inference_dir + "pars_{seed}.bionj", seed=pars_seeds, msa=msa_names,allow_missing=True),
+        pars_starting_trees = expand(iqtree_tree_inference_dir + "pars_{seed}.iqtree", seed=pars_seeds, msa=msa_names,allow_missing=True),
         pars_search_logs    = expand(iqtree_tree_inference_dir + "pars_{seed}.log", seed=pars_seeds, msa=msa_names,allow_missing=True),
         rand_search_trees   = expand(iqtree_tree_inference_dir + "rand_{seed}.treefile",  seed=rand_seeds, msa=msa_names, allow_missing=True),
         rand_search_logs    = expand(iqtree_tree_inference_dir + "rand_{seed}.log", seed=rand_seeds, msa=msa_names,allow_missing=True),

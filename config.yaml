@@ -2,7 +2,7 @@
 # the data type is automatically inferred and the model set to GTR+G for DNA data and to LG+G for AA data
 
 msa_paths: [
-   path/to/msa1.phy,
+   .tests/data/DNA/4.phy,
 ]
 
 # to use partitioned MSAs, provide a link to the partition file for each MSA,
@@ -23,13 +23,13 @@ outdir: results/
 
 software:
   raxml-ng:
-    command: path/to/raxml-ng # https://github.com/tschuelia/raxml-ng
+    command: /usr/local/bin/raxml-ng # https://github.com/tschuelia/raxml-ng
     threads: 2
   iqtree:
-    command: path/to/iqtree # http://www.iqtree.org
+    command: /usr/local/bin/iqtree3 # http://www.iqtree.org
     threads: 2
 
 _debug:
-  _num_pars_trees: 50
-  _num_rand_trees: 50
-  _num_parsimony_trees: 100
+  _num_pars_trees: 5
+  _num_rand_trees: 5
+  _num_parsimony_trees: 10

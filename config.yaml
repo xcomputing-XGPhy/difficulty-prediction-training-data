@@ -2,7 +2,7 @@
 # the data type is automatically inferred and the model set to GTR+G for DNA data and to LG+G for AA data
 
 msa_paths: [
-   .tests/data/DNA/4.phy,
+   /home/vanvan/Downloads/dna_M3777_363_1707.phy,
 ]
 
 # to use partitioned MSAs, provide a link to the partition file for each MSA,
@@ -30,6 +30,6 @@ software:
     threads: 2
 
 _debug:
-  _num_pars_trees: 5
-  _num_rand_trees: 5
-  _num_parsimony_trees: 10
+  _num_pars_trees: 20
+  _num_rand_trees: 20
+  _num_parsimony_trees: 40

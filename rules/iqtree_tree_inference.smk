@@ -4,8 +4,8 @@ rule iqtree_pars_tree:
     """
     output:
         iqtree_best_tree     = f"{iqtree_tree_inference_prefix_pars}.treefile",
-        iqtree_starting_tree = f"{iqtree_tree_inference_prefix_pars}.iqtree",
-        iqtree_best_model    = f"{iqtree_tree_inference_prefix_pars}.model.gz",
+        # iqtree_starting_tree = f"{iqtree_tree_inference_prefix_pars}.iqtree",
+        iqtree_best_model    = f"{iqtree_tree_inference_prefix_pars}.iqtree",
         iqtree_log           = f"{iqtree_tree_inference_prefix_pars}.log",
     params:
         prefix  = iqtree_tree_inference_prefix_pars,
@@ -28,14 +28,13 @@ rule iqtree_pars_tree:
 
 rule iqtree_rand_tree:
     output:
-        iqtree_tree  = iqtree_tree_inference_prefix_rand + ".treefile",
-        iqtree_model = iqtree_tree_inference_prefix_rand + ".iqtree",
-        iqtree_log   = iqtree_tree_inference_prefix_rand + ".log"
+        iqtree_tree  = iqtree_tree_inference_prefix_rand + ".xgphy.treefile",
+        iqtree_log   = iqtree_tree_inference_prefix_rand + ".xgphy.log"
     params:
-        prefix  = iqtree_tree_inference_prefix_rand,
+        prefix  = iqtree_tree_inference_dir + "rand",
         msa     = lambda wc: msas[wc.msa],
-        model   = lambda wc: iqtree_models[wc.msa],
-        threads = config["software"]["iqtree"]["threads"]
+        threads = config["software"]["iqtree"]["threads"],
+        num_rand_trees = num_rand_trees
     log:
         f"{iqtree_tree_inference_prefix_rand}.snakelog",
     shell:
@@ -47,7 +46,7 @@ rule iqtree_rand_tree:
         "-T {params.threads} "
         "-redo "
         "-n 3 "
-        "-ninit 10 "
-        "-van "
-        "-van_nni_count 10 "
+        "-ninit {num_rand_trees} "
+        "-xgphy "
+        "-xgphy_nni_count 3 "
         "> {output.iqtree_log} 2>&1"

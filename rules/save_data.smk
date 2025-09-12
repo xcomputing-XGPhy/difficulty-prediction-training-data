@@ -2,10 +2,10 @@ rule save_data:
     input:
         # Tree seach tree files and logs
         pars_search_trees   = expand(iqtree_tree_inference_prefix_pars + ".treefile",seed=pars_seeds,allow_missing=True),
-        pars_starting_trees = expand(iqtree_tree_inference_prefix_pars + ".treefile",seed=pars_seeds,allow_missing=True),
+        # pars_starting_trees = expand(iqtree_tree_inference_prefix_pars + ".treefile",seed=pars_seeds,allow_missing=True),
         pars_search_logs    = expand(iqtree_tree_inference_prefix_pars + ".log",seed=pars_seeds,allow_missing=True),
-        rand_search_trees   = expand(iqtree_tree_inference_prefix_rand + ".treefile", seed=rand_seeds, allow_missing=True),
-        rand_search_logs    = expand(iqtree_tree_inference_prefix_rand + ".log",seed=rand_seeds,allow_missing=True),
+        rand_search_trees   = expand(iqtree_tree_inference_prefix_rand + ".xgphy.treefile", seed=rand_seeds, allow_missing=True),
+        rand_search_logs    = expand(iqtree_tree_inference_prefix_rand + "..xgphy.log",seed=rand_seeds,allow_missing=True),
         search_logs_collected = f"{iqtree_tree_inference_dir}AllSearchLogs.log",
 
         # Tree search tree RFDistance logs

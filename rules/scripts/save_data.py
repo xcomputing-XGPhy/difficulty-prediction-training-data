@@ -54,7 +54,7 @@ iqtree_command = snakemake.params.iqtree_command
 
 # tree search
 pars_search_trees = snakemake.input.pars_search_trees
-pars_starting_trees = snakemake.input.pars_starting_trees
+#pars_starting_trees = snakemake.input.pars_starting_trees
 pars_search_logs = snakemake.input.pars_search_logs
 rand_search_trees = snakemake.input.rand_search_trees
 rand_search_logs = snakemake.input.rand_search_logs
@@ -97,12 +97,12 @@ data_type = MSA(snakemake.params.msa).data_type
 # for the starting tree features, we simply take the first parsimony tree inference
 single_tree = pars_search_trees[0]
 single_tree_log = pars_search_logs[0]
-single_tree_starting = pars_starting_trees[0]
+#single_tree_starting = pars_starting_trees[0]
 
 slow_spr, fast_spr = get_iqtree_num_iterations(single_tree_log)
 starting_llh = get_iqtree_starting_llh(single_tree_log)
 final_llh = get_iqtree_llh(single_tree_log)
-newick_starting = open(single_tree_starting).readline()
+#newick_starting = open(single_tree_starting).readline()
 newick_final = open(single_tree).readline()
 rate_het, base_freq, subst_rates = get_model_parameter_estimates(single_tree_log)
 
@@ -125,7 +125,7 @@ dataset_dbobj = Dataset.create(
     mean_llh_search     = np.mean(llhs_search),
     std_llh_search      = np.std(llhs_search),
 
-    avg_rfdist_eval = avg_rfdist_search,
+    avg_rfdist_eval = avg_rfdist_eval,
     num_topos_eval  = num_topos_eval,
     mean_llh_eval   = np.mean(llhs_eval),
     std_llh_eval    = np.std(llhs_eval),
@@ -143,7 +143,7 @@ dataset_dbobj = Dataset.create(
     num_fast_spr_rounds             = fast_spr,
     llh_starting_tree               = starting_llh,
     llh_final_tree                  = final_llh,
-    rfdistance_starting_final       = rel_rfdistance_starting_final(newick_starting, newick_final, raxmlng_command),
+    #rfdistance_starting_final       = rel_rfdistance_starting_final(newick_starting, newick_final, raxmlng_command),
     llh_difference_starting_final   = final_llh - starting_llh,
     rate_heterogeneity_final        = rate_het,
     eq_frequencies_final            = base_freq,
@@ -153,7 +153,7 @@ dataset_dbobj = Dataset.create(
     total_branch_length_final       = get_total_branch_length_for_tree(newick_final),
     minimum_branch_length_final     = get_min_branch_length_for_tree(newick_final),
     maximum_branch_length_final     = get_max_branch_length_for_tree(newick_final),
-    newick_starting                 = newick_starting,
+    #newick_starting                 = newick_starting,
     newick_final                    = newick_final,
 
     # MSA Features

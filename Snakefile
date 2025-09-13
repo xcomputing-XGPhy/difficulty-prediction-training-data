@@ -143,7 +143,7 @@ rule all:
         # parsimony_logs = expand(output_files_parsimony_trees + "AllParsimonyLogs.log", msa=msa_names),
         # parsimony_rfdistance = expand(output_files_parsimony_trees + "parsimony.raxml.rfDistances.log", msa=msa_names),
     shell:
-        "echo 'This goes into log file' > {seed}"
+        "echo 'This goes into log file' > {iqtree_tree_inference_prefix_rand}"
 
 include: "rules/iqtree_tree_inference.smk"
 include: "rules/iqtree_tree_evaluation.smk"

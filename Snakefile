@@ -83,7 +83,7 @@ output_files_iqtree_dir = output_files_dir + "iqtree/"
 iqtree_tree_inference_dir = output_files_iqtree_dir + "inference/"
 iqtree_tree_inference_prefix_pars = iqtree_tree_inference_dir + "pars_{seed}"
 #iqtree_tree_inference_prefix_rand = iqtree_tree_inference_dir + "rand_{seed}"
-iqtree_tree_inference_prefix_rand = iqtree_tree_inference_dir + "rand.tree{seed}"
+iqtree_tree_inference_prefix_rand = iqtree_tree_inference_dir + "rand_tree{seed}"
 
 # IQ-TREE evaluation 
 iqtree_tree_eval_dir        = output_files_iqtree_dir + "evaluation/"
@@ -100,48 +100,10 @@ rule all:
     input:
         expand(f"{db_path}training_data.parquet", msa=msa_names),
         expand(iqtree_tree_inference_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names),
-        expand(iqtree_tree_inference_dir + "rand.tree{seed}.xgphy.treefile", seed=rand_seeds, msa=msa_names),
+        expand(iqtree_tree_inference_dir + "rand_tree{seed}_xgphy.treefile", seed=rand_seeds, msa=msa_names),
         expand(iqtree_tree_eval_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names),
         expand(iqtree_tree_eval_dir + "rand_{seed}.treefile", seed=rand_seeds, msa=msa_names),
-        # # Tree seach tree files and logs
-        # pars_search_trees   = expand(iqtree_tree_inference_dir + "pars_{seed}.treefile", seed=pars_seeds, msa=msa_names,allow_missing=True),
-        # pars_starting_trees = expand(iqtree_tree_inference_dir + "pars_{seed}.iqtree", seed=pars_seeds, msa=msa_names,allow_missing=True),
-        # pars_search_logs    = expand(iqtree_tree_inference_dir + "pars_{seed}.log", seed=pars_seeds, msa=msa_names,allow_missing=True),
-        # # rand_search_trees   = expand(iqtree_tree_inference_dir + "rand_{seed}.treefile",  seed=rand_seeds, msa=msa_names, allow_missing=True),
-        # # rand_search_logs    = expand(iqtree_tree_inference_dir + "rand_{seed}.log", seed=rand_seeds, msa=msa_names,allow_missing=True),
-        # rand_search_trees   = expand(iqtree_tree_inference_dir + "rand.tree{seed}.vanvan",  seed=rand_seeds, msa=msa_names, allow_missing=True),
-        # rand_search_logs    = expand(iqtree_tree_inference_dir + "rand.tree{seed}.log", seed=rand_seeds, msa=msa_names,allow_missing=True),
-        # search_logs_collected = expand(iqtree_tree_inference_dir + "AllSearchLogs.log", msa=msa_names),
-
-        # # Tree search tree RFDistance logs
-        # search_rfdistance = expand(iqtree_tree_inference_dir + "inference.raxml.rfDistances.log", msa=msa_names),
-
-        # # Eval tree files and logs
-        # pars_eval_trees = expand(iqtree_tree_eval_dir + "pars_{seed}.treefile",  seed=pars_seeds, msa=msa_names, allow_missing=True),
-        # pars_eval_logs  = expand(iqtree_tree_eval_dir + "pars_{seed}.log", seed=pars_seeds, msa=msa_names,allow_missing=True),
-        # rand_eval_trees = expand(iqtree_tree_eval_dir + "rand_{seed}.treefile",  seed=rand_seeds, msa=msa_names, allow_missing=True),
-        # rand_eval_logs  = expand(iqtree_tree_eval_dir + "rand_{seed}.log", seed=rand_seeds, msa=msa_names,allow_missing=True),
-        # eval_logs_collected = expand(iqtree_tree_eval_dir + "AllEvalLogs.log", msa=msa_names),
-
-
-        # # Eval tree RFDistance logs
-        # eval_rfdistance = expand(iqtree_tree_eval_dir + "eval.raxml.rfDistances.log", msa=msa_names),
-
-        # # Plausible tree RFDistance logs
-        # plausible_rfdistance = expand(iqtree_tree_eval_dir + "plausible.raxml.rfDistances.log", msa=msa_names),
-        # plausible_trees_collected = expand(iqtree_tree_eval_dir + "AllPlausibleTrees.trees", msa=msa_names),
-
-        # # IQ-Tree significance test results and clusters
-        # iqtree_results  = expand(output_files_iqtree_dir+"significance.iqtree", msa=msa_names),
-        # clusters        = expand(output_files_iqtree_dir + "filteredEvalTrees.clusters.pkl", msa=msa_names),
-
-        # # MSA Features
-        # msa_features = expand(output_files_dir + "msa_features.json", msa=msa_names),
-
-        # # Parsimony Trees and logs
-        # parsimony_trees = expand(output_files_parsimony_trees + "AllParsimonyTrees.trees", msa=msa_names),
-        # parsimony_logs = expand(output_files_parsimony_trees + "AllParsimonyLogs.log", msa=msa_names),
-        # parsimony_rfdistance = expand(output_files_parsimony_trees + "parsimony.raxml.rfDistances.log", msa=msa_names),
+        
 
 include: "rules/iqtree_tree_inference.smk"
 include: "rules/iqtree_tree_evaluation.smk"

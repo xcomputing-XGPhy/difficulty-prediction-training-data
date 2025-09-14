@@ -4,7 +4,7 @@ rule collect_search_trees:
     """
     input:
         iqtree_pars_search_trees = expand(iqtree_tree_inference_prefix_pars + ".treefile", seed=pars_seeds, allow_missing=True),
-        iqtree_rand_search_trees = expand(iqtree_tree_inference_prefix_rand + ".xgphy.treefile", seed=rand_seeds, allow_missing=True)
+        iqtree_rand_search_trees = expand(iqtree_tree_inference_prefix_rand + "_xgphy.treefile", seed=rand_seeds, allow_missing=True)
     output:
         all_search_trees = f"{iqtree_tree_inference_dir}AllSearchTrees.trees"
     shell:
@@ -17,7 +17,7 @@ rule collect_search_logs:
     """
     input:
         iqtree_pars_search_logs = expand(iqtree_tree_inference_prefix_pars + ".log", seed=pars_seeds, allow_missing=True),
-        iqtree_rand_search_logs = expand(iqtree_tree_inference_prefix_rand + ".xgphy.log", seed=rand_seeds, allow_missing=True)
+        iqtree_rand_search_logs = expand(iqtree_tree_inference_prefix_rand + "_xgphy.log", seed=rand_seeds, allow_missing=True)
     output:
         all_search_logs = f"{iqtree_tree_inference_dir}AllSearchLogs.log"
     shell:

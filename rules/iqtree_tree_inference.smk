@@ -28,8 +28,8 @@ rule iqtree_pars_tree:
 
 rule iqtree_rand_tree:
     output:
-        iqtree_tree  = iqtree_tree_inference_prefix_rand + ".xgphy.treefile",
-        iqtree_log   = iqtree_tree_inference_prefix_rand + ".xgphy.log"
+        iqtree_tree  = iqtree_tree_inference_prefix_rand + "_xgphy.treefile",
+        iqtree_log   = iqtree_tree_inference_prefix_rand + "_xgphy.log"
     params:
         prefix  = iqtree_tree_inference_dir + "rand",
         msa     = lambda wc: msas[wc.msa],

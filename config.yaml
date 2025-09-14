@@ -2,7 +2,7 @@
 # the data type is automatically inferred and the model set to GTR+G for DNA data and to LG+G for AA data
 
 msa_paths: [
-  .tests/data/DNA/2.phy,
+  .tests/data/DNA/1.phy,
 ]
 
 # to use partitioned MSAs, provide a link to the partition file for each MSA,

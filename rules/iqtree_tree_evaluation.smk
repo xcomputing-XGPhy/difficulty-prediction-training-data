@@ -32,7 +32,7 @@ rule reevaluate_iqtree_rand_tree:
     Rule that re-evaluates the given random search tree.
     """
     input:
-        best_tree_of_run    = f"{iqtree_tree_inference_prefix_rand}.xgphy.treefile"
+        best_tree_of_run    = f"{iqtree_tree_inference_prefix_rand}_xgphy.treefile"
     output:
         log         = f"{iqtree_tree_eval_prefix_rand}.log",
         best_tree   = f"{iqtree_tree_eval_prefix_rand}.treefile",

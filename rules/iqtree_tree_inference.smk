@@ -27,26 +27,30 @@ rule iqtree_pars_tree:
 
 
 rule iqtree_rand_tree:
+    """
+    Rule that infers multiple random trees in a single IQ-TREE run using -ninit.
+    """
     output:
-        iqtree_tree  = iqtree_tree_inference_prefix_rand + "_xgphy.treefile",
-        iqtree_log   = iqtree_tree_inference_prefix_rand + "_xgphy.log"
+        treefiles = [f"{iqtree_tree_inference_dir}rand_tree{i}_xgphy.treefile" for i in range(config["_debug"]["_num_rand_trees"])],
+        logs = [f"{iqtree_tree_inference_dir}rand_tree{i}_xgphy.log" for i in range(config["_debug"]["_num_rand_trees"])],
+        iqtree_log = f"{iqtree_tree_inference_dir}rand.log"
     params:
         prefix  = iqtree_tree_inference_dir + "rand",
         msa     = lambda wc: msas[wc.msa],
         threads = config["software"]["iqtree"]["threads"],
-        num_rand_trees = num_rand_trees
+        num_rand_trees = config["_debug"]["_num_rand_trees"]
     log:
-        f"{iqtree_tree_inference_prefix_rand}.snakelog",
+        iqtree_tree_inference_dir + "rand.snakelog",
     shell:
         "{iqtree_command} "
         "-s {params.msa} "
         "-pre {params.prefix} "
-        "-seed {wildcards.seed} "
+        "-seed 0 "
         "-t RANDOM "
         "-T {params.threads} "
         "-redo "
         "-n 3 "
-        "-ninit {num_rand_trees} "
+        "-ninit {params.num_rand_trees} "
         "-xgphy "
         "-xgphy_nni_count 3 "
         "> {output.iqtree_log} 2>&1"

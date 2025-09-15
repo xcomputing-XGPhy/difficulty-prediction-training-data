@@ -2,7 +2,7 @@
 # the data type is automatically inferred and the model set to GTR+G for DNA data and to LG+G for AA data
 
 msa_paths: [
-  .tests/data/DNA/1.phy,
+  .tests/data/DNA/4.phy,
 ]
 
 # to use partitioned MSAs, provide a link to the partition file for each MSA,
@@ -27,7 +27,7 @@ software:
     threads: 2
   iqtree:
     command: /usr/local/bin/iqtree3 # http://www.iqtree.org
-    threads: 2
+    threads: 1
 
 _debug:
   _num_pars_trees: 20

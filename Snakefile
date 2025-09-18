@@ -1,5 +1,6 @@
 import os
 import sys
+import glob
 
 sys.path.append("rules/scripts")
 from pypythia.msa import MSA
@@ -21,6 +22,11 @@ parsimony_seeds = range(1, num_parsimony_trees + 1)
 
 # TODO: resolve duplicate names
 msa_paths = config["msa_paths"]
+# msa_paths = []
+# msa_dir = config["msa_dir"]
+# for ext in config["extensions"]:
+#     msa_paths.extend(glob.glob(f"{msa_dir}/*{ext}"))
+
 part_paths_raxmlng = []
 part_paths_iqtree = []
 partitioned = False

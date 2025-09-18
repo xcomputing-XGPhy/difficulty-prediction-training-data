@@ -2,8 +2,11 @@
 # the data type is automatically inferred and the model set to GTR+G for DNA data and to LG+G for AA data
 
 msa_paths: [
-  .tests/data/DNA/4.phy,
+  .tests/data/AA/0.phy
 ]
+extensions: [".fasta", ".phy"]
+
+msa_dir: /path to directory with MSAs
 
 # to use partitioned MSAs, provide a link to the partition file for each MSA,
 # the first in RAxML-NG compatible format, the second in IQ-Tree compatible format
@@ -19,7 +22,7 @@ msa_paths: [
 # each subdirectory contains:
 # - a directory called "output_files": contains all RAxML-NG and IQ-Tree log files
 # - an .sqlite3 database file containing all information, see README.md for database schema
-outdir: results/
+outdir: data_training/
 
 software:
   raxml-ng:
@@ -30,6 +33,6 @@ software:
     threads: 1
 
 _debug:
-  _num_pars_trees: 20
-  _num_rand_trees: 20
-  _num_parsimony_trees: 40
+  _num_pars_trees: 50
+  _num_rand_trees: 50
+  _num_parsimony_trees: 100

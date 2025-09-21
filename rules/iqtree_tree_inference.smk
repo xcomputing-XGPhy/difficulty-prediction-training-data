@@ -23,6 +23,7 @@ rule iqtree_pars_tree:
         "-T {params.threads} "
         "-redo "
         "-n 0 "
+        "-nt AUTO "
         "> {output.iqtree_log} 2>&1"
 
 
@@ -53,4 +54,5 @@ rule iqtree_rand_tree:
         "-ninit {params.num_rand_trees} "
         "-xgphy "
         "-xgphy_nni_count 3 "
+        "-nt AUTO "
         "> {output.iqtree_log} 2>&1"

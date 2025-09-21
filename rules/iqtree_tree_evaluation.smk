@@ -24,6 +24,7 @@ rule reevaluate_iqtree_pars_tree:
         "-T {params.threads} "
         "-seed 0 "
         "-redo "
+        "-nt AUTO "
         "> {output.eval_log} "
 
 
@@ -53,4 +54,5 @@ rule reevaluate_iqtree_rand_tree:
         "-T {params.threads} "
         "-seed 0 "
         "-redo "
+        "-nt AUTO "
         "> {output.eval_log} "

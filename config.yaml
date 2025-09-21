@@ -6,7 +6,7 @@ msa_paths: [
 ]
 extensions: [".fasta", ".phy"]
 
-msa_dir: /path to directory with MSAs
+msa_dir: /home/vanvan/Downloads/data_treebase/DIU_TRAINING_DATA/data4
 
 # to use partitioned MSAs, provide a link to the partition file for each MSA,
 # the first in RAxML-NG compatible format, the second in IQ-Tree compatible format
@@ -22,7 +22,7 @@ msa_dir: /path to directory with MSAs
 # each subdirectory contains:
 # - a directory called "output_files": contains all RAxML-NG and IQ-Tree log files
 # - an .sqlite3 database file containing all information, see README.md for database schema
-outdir: data_training/
+outdir: training_data/
 
 software:
   raxml-ng:
@@ -33,6 +33,6 @@ software:
     threads: 1
 
 _debug:
-  _num_pars_trees: 50
-  _num_rand_trees: 50
-  _num_parsimony_trees: 100
+  _num_pars_trees: 20
+  _num_rand_trees: 20
+  _num_parsimony_trees: 40

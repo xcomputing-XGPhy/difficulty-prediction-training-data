@@ -145,3 +145,4 @@ cython_debug/
 
 .tests/
 data_training
+training_data

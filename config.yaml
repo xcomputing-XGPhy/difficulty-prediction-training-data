@@ -2,7 +2,7 @@
 # the data type is automatically inferred and the model set to GTR+G for DNA data and to LG+G for AA data
 
 msa_paths: [
-  .tests/data/AA/0.phy
+  /home/vanvan/Downloads/data_treebase/DIU_TRAINING_DATA/data5/prot_M11740_138_4427.phy
 ]
 extensions: [".fasta", ".phy"]
 
@@ -30,7 +30,7 @@ software:
     threads: 2
   iqtree:
     command: /usr/local/bin/iqtree3 # http://www.iqtree.org
-    threads: 1
+    threads: 2
 
 _debug:
   _num_pars_trees: 20

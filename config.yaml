@@ -2,7 +2,7 @@
 # the data type is automatically inferred and the model set to GTR+G for DNA data and to LG+G for AA data
 
 msa_paths: [
-  .tests/data/AA/0.phy
+  /home/vanvan/difficulty-prediction-training-data/.tests/data/DNA/0.fasta
 ]
 extensions: [".fasta", ".phy"]
 
@@ -33,6 +33,6 @@ software:
     threads: 1
 
 _debug:
-  _num_pars_trees: 20
-  _num_rand_trees: 20
-  _num_parsimony_trees: 40
+  _num_pars_trees: 1
+  _num_rand_trees: 1
+  _num_parsimony_trees: 2

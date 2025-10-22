@@ -10,21 +10,27 @@ rule iqtree_pars_tree:
     params:
         prefix  = iqtree_tree_inference_prefix_pars,
         msa     = lambda wildcards: msas[wildcards.msa],
-        model   = lambda wildcards: iqtree_models[wildcards.msa],
+        data_type   = lambda wildcards: data_types[wildcards.msa],
         threads = config["software"]["iqtree"]["threads"]
     log:
         f"{iqtree_tree_inference_prefix_pars}.snakelog",
-    shell:
-        "{iqtree_command} "
-        "-s {params.msa} "
-        "-pre {params.prefix} "
-        "-seed {wildcards.seed} "
-        "-ninit 1 "
-        "-T {params.threads} "
-        "-redo "
-        "-n 0 "
-        "-nt AUTO "
-        "> {output.iqtree_log} 2>&1"
+    run:
+        detectType = "-st DNA " if str(params.data_type) == "DataType.DNA" else (
+        "-st AA " if str(params.data_type) == "DataType.AA" else "")
+
+        shell(
+            "{iqtree_command} "
+            "-s {params.msa} "
+            "{detectType} "
+            "-pre {params.prefix} "
+            "-seed {wildcards.seed} "
+            "-ninit 1 "
+            "-T {params.threads} "
+            "-redo "
+            "-n 0 "
+            "-nt AUTO "
+            "> {output.iqtree_log} 2>&1"
+        )
 
 
 rule iqtree_rand_tree:
@@ -39,20 +45,27 @@ rule iqtree_rand_tree:
         prefix  = iqtree_tree_inference_dir + "rand",
         msa     = lambda wc: msas[wc.msa],
         threads = config["software"]["iqtree"]["threads"],
+        data_type   = lambda wildcards: data_types[wildcards.msa],
         num_rand_trees = config["_debug"]["_num_rand_trees"]
     log:
         iqtree_tree_inference_dir + "rand.snakelog",
-    shell:
-        "{iqtree_command} "
-        "-s {params.msa} "
-        "-pre {params.prefix} "
-        "-seed 0 "
-        "-t RANDOM "
-        "-T {params.threads} "
-        "-redo "
-        "-n 3 "
-        "-ninit {params.num_rand_trees} "
-        "-xgphy "
-        "-xgphy_nni_count 3 "
-        "-nt AUTO "
-        "> {output.iqtree_log} 2>&1"
+    run:
+        detectType = "-st DNA " if str(params.data_type) == "DataType.DNA" else (
+        "-st AA " if str(params.data_type) == "DataType.AA" else "")
+
+        shell(
+            "{iqtree_command} "
+            "-s {params.msa} "
+            "{detectType}"
+            "-pre {params.prefix} "
+            "-seed 0 "
+            "-t RANDOM "
+            "-T {params.threads} "
+            "-redo "
+            "-n 3 "
+            "-ninit {params.num_rand_trees} "
+            "-xgphy "
+            "-xgphy_nni_count 3 "
+            "-nt AUTO "
+            "> {output.iqtree_log} 2>&1"
+        )                                                                       

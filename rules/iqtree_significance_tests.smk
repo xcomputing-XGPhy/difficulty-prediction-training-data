@@ -39,10 +39,16 @@ rule iqtree_significance_tests_on_eval_trees:
     log:
         f"{output_files_iqtree_dir}significance.iqtree.snakelog",
     run:
-        morph = "-st MORPH " if params.data_type == "MORPH" else ""
+        detectType = (
+            "-st MORPH " if params.data_type == "MORPH"
+             else "-st DNA " if str(params.data_type) == "DataType.DNA"
+             else "-st AA " if str(params.data_type) == "DataType.AA"
+            else ""
+        )
+
         shell("{iqtree_command} "
         "-s {params.msa} "
-        "{morph} "
+        "{detectType} "
         "{params.model_str} {params.model} "
         "-pre {params.prefix} "
         "-z {input.filtered_trees} "

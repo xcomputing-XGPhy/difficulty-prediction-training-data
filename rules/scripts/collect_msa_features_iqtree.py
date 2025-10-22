@@ -12,11 +12,14 @@ msa = MSA(msa_file)
 # so for morphological data we cannot compute the treelikeness at the moment
 compute_treelikeness = msa.data_type != "MORPH"
 
+data_type_str = getattr(msa.data_type, "name", str(msa.data_type)).replace("DataType.", "")
+sequence_type = {"DNA": "DNA", "AA": "AA", "MORPH": "MORPH"}.get(data_type_str, None)
 iqtree = IQTree(snakemake.params.iqtree_command)
 
-patterns, gaps, invariant = iqtree.get_patterns_gaps_invariant(msa_file, model)
+patterns, gaps, invariant = iqtree.get_patterns_gaps_invariant(msa_file, model,sequence_type=sequence_type)
 
 msa_features = {
+    "data_type": str(msa.data_type),
     "taxa": msa.number_of_taxa(),
     "sites": msa.number_of_sites(),
     "patterns": patterns,

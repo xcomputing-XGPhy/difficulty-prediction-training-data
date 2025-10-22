@@ -32,7 +32,7 @@ class IQTree:
         self.exe_path = exe_path
 
     def _base_cmd(
-            self, msa_file: FilePath, model: Model, prefix: str, **kwargs
+            self, msa_file: FilePath, model: Model, prefix: str,  sequence_type: str = None, **kwargs
     ) -> Command:
         additional_settings = []
         for key, value in kwargs.items():
@@ -41,7 +41,7 @@ class IQTree:
             else:
                 additional_settings += [f"-{key}", str(value)]
 
-        return [
+        cmd = [
             self.exe_path,
             "-s",
             msa_file,
@@ -51,6 +51,12 @@ class IQTree:
             prefix,
             *additional_settings,
         ]
+
+        if sequence_type:
+            cmd += ["-st", sequence_type]
+
+        return cmd
+
 
     def _run_alignment_parse(
             self, msa_file: FilePath, model: Model, prefix: str, **kwargs
@@ -127,7 +133,7 @@ class IQTree:
             return get_iqtree_rfdist_results(log_file)
 
     def get_patterns_gaps_invariant(
-            self, msa_file: FilePath, model: Model, prefix: str = None
+            self, msa_file: FilePath, model: Model, prefix: str = None, sequence_type: str = None
     ) -> Tuple[int, float, float]:
         """Method that obtains the number of patterns, proportion of gaps, and proportion of invariant sites in the given MSA.
 
@@ -144,7 +150,7 @@ class IQTree:
         with TemporaryDirectory() as tmpdir:
             if not prefix:
                 prefix = os.path.join(tmpdir, "parse")
-            self._run_alignment_parse(msa_file, model, prefix)
+            self._run_alignment_parse(msa_file, model, prefix, sequence_type=sequence_type)
             return get_patterns_gaps_invariant(f"{prefix}.log")
 
     def infer_tree(

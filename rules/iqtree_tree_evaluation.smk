@@ -12,21 +12,27 @@ rule reevaluate_iqtree_pars_tree:
         prefix  = iqtree_tree_eval_prefix_pars,
         msa     = lambda wildcards: msas[wildcards.msa],
         model   = lambda wildcards: iqtree_models[wildcards.msa],
+        data_type   = lambda wildcards: data_types[wildcards.msa],
         threads = config["software"]["iqtree"]["threads"]
     log:
         f"{iqtree_tree_eval_prefix_pars}.snakelog"
-    shell:
-        "{iqtree_command} "
-        "-s {params.msa} "
-        "-m {params.model} "
-        "-pre {params.prefix} "
-        "-te {input.best_tree_of_run} "
-        "-T {params.threads} "
-        "-seed 0 "
-        "-redo "
-        "-nt AUTO "
-        "> {output.eval_log} "
+    run:
+        detectType = "-st DNA " if str(params.data_type) == "DataType.DNA" else (
+        "-st AA " if str(params.data_type) == "DataType.AA" else "")
 
+        shell(
+            "{iqtree_command} "
+            "-s {params.msa} "
+            "{detectType}"
+            "-m {params.model} "
+            "-pre {params.prefix} "
+            "-te {input.best_tree_of_run} "
+            "-T {params.threads} "
+            "-seed 0 "
+            "-redo "
+            "-nt AUTO "
+            "> {output.eval_log} "
+        )
 
 rule reevaluate_iqtree_rand_tree:
     """
@@ -42,17 +48,24 @@ rule reevaluate_iqtree_rand_tree:
         prefix  = iqtree_tree_eval_prefix_rand,
         msa     = lambda wildcards: msas[wildcards.msa],
         model   = lambda wildcards: iqtree_models[wildcards.msa],
+        data_type   = lambda wildcards: data_types[wildcards.msa],
         threads = config["software"]["iqtree"]["threads"]
     log:
         f"{iqtree_tree_eval_prefix_rand}.snakelog"
-    shell:
-        "{iqtree_command} "
-        "-s {params.msa} "
-        "-m {params.model} "
-        "-pre {params.prefix} "
-        "-te {input.best_tree_of_run} "
-        "-T {params.threads} "
-        "-seed 0 "
-        "-redo "
-        "-nt AUTO "
-        "> {output.eval_log} "
+    run:
+        detectType = "-st DNA " if str(params.data_type) == "DataType.DNA" else (
+        "-st AA " if str(params.data_type) == "DataType.AA" else "")
+            
+        shell(
+            "{iqtree_command} "
+            "-s {params.msa} "
+            "{detectType}"
+            "-m {params.model} "
+            "-pre {params.prefix} "
+            "-te {input.best_tree_of_run} "
+            "-T {params.threads} "
+            "-seed 0 "
+            "-redo "
+            "-nt AUTO "
+            "> {output.eval_log} "
+        )
